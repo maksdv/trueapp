@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "363514048331",
+    "project_id": "trueapp-934ef",
+    "storage_bucket": "trueapp-934ef.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:363514048331:android:ca3e8ae62eea639bd642ce",
+        "android_client_info": {
+          "package_name": "com.trueapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "363514048331-fore4c6gooc6fbe5ve6tas2jjfbvrsni.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDhylovtpsYUc-Vj3eED8IdFSJ0nnMu7iQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "363514048331-fore4c6gooc6fbe5ve6tas2jjfbvrsni.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
