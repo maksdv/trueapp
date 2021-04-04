@@ -1,5 +1,6 @@
 export const planList = [
     {
+        id: 1,
         title: 'Spain plan',
         description: 'This plan can be used in all Spain territory.',
         list: [
@@ -9,6 +10,7 @@ export const planList = [
         ]
     },
     {
+        id:2,
         title: 'USA plan',
         description: 'This plan can be used in all USA territory.',
         list: [

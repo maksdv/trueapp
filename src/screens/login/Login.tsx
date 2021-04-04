@@ -1,23 +1,31 @@
 import React, {useContext, useState} from 'react';
 import {
-  View,
   Text,
   TouchableOpacity,
-  Image,
-  Platform,
   StyleSheet,
   ScrollView,
+  Alert,
 } from 'react-native';
 import FormInput from '../../components/form/FormInput';
 import FormButton from '../../components/form/FromButton';
-import SocialButton from '../../components/form/SocialButton';
 import {AuthContext} from '../../navigation/AuthProvider';
 
 const Login = ({navigation}) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
   const {login, googleLogin, fbLogin} = useContext(AuthContext);
+
+  const handleLogin = () => {
+    if (!email || !password) {
+      Alert.alert('Atention', 'Email or Password is empty');
+    } else {
+      try {
+        login(email, password);
+      } catch (error) {
+        Alert.alert('Ups', 'Something went wrong');
+      }
+    }
+  };
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
@@ -39,35 +47,7 @@ const Login = ({navigation}) => {
         secureTextEntry={true}
       />
 
-      <FormButton
-        buttonTitle="Sign In"
-        onPress={() => login(email, password)}
-      />
-
-      <TouchableOpacity style={styles.forgotButton} onPress={() => {}}>
-        <Text style={styles.navButtonText}>Forgot Password?</Text>
-      </TouchableOpacity>
-
-      {Platform.OS === 'android' ? (
-        <View>
-          <SocialButton
-            buttonTitle="Sign In with Facebook"
-            btnType="facebook"
-            color="#4867aa"
-            backgroundColor="#e6eaf4"
-            onPress={() => fbLogin()}
-          />
-
-          <SocialButton
-            buttonTitle="Sign In with Google"
-            btnType="google"
-            color="#de4d41"
-            backgroundColor="#f5e7ea"
-            onPress={() => googleLogin()}
-          />
-        </View>
-      ) : null}
-
+      <FormButton buttonTitle="Sign In" onPress={() => handleLogin()} />
       <TouchableOpacity
         style={styles.forgotButton}
         onPress={() => navigation.navigate('Signup')}>
@@ -83,6 +63,7 @@ export default Login;
 
 const styles = StyleSheet.create({
   container: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,

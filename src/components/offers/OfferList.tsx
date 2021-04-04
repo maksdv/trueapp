@@ -1,8 +1,9 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import React from 'react';
+import {StyleSheet, ActivityIndicator, View} from 'react-native';
 import {FlatList} from 'react-native-gesture-handler';
 import {planList} from '../../service/PlanList';
 import {OfferItem} from './OfferItem';
+import {ItemType} from './OfferItem';
 
 const styles = StyleSheet.create({
   container: {
@@ -17,19 +18,33 @@ const styles = StyleSheet.create({
   },
 });
 
-export const OfferList = ({}) => {
-  const [searchingText, setSearchingText] = useState<string>('');
-  const [countriesList, setCountriesList] = useState<[]>([]);
+type OfferLisType = {
+  action: any;
+  selected: ItemType;
+};
 
+export const OfferList = ({action, selected}: OfferLisType) => {
   const renderItem = ({item, index}) => {
-    return <OfferItem name={item} index={index} onPress={{}} />;
+    const {id, list, title, description} = item;
+    return (
+      <OfferItem
+        title={title}
+        description={description}
+        list={list}
+        itemSelected={selected}
+        onPress={action}
+        index={index}
+      />
+    );
   };
+  if (!planList) return <ActivityIndicator size="large" color="#0000ff" />;
+
   return (
     <View style={styles.container}>
       <FlatList
         data={planList}
         renderItem={renderItem}
-        keyExtractor={item => item.name}
+        keyExtractor={item => item.id}
         contentContainerStyle={styles.listContainer}
       />
     </View>

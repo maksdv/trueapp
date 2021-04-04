@@ -4,6 +4,7 @@ export const lightColors = {
     primary: '#ccf3fc',
     text: '#121212',
     error: '#D32F2F',
+    offerRow: '#ebfaff'
   };
   
   // Dark theme colors
@@ -12,6 +13,7 @@ export const lightColors = {
     primary: '#71d8f0',
     text: '#FFFFFF',
     error: '#EF9A9A',
+    offerRow: '#ebfaff'
   };
 
   export type Colors = typeof lightColors;

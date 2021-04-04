@@ -27,6 +27,7 @@ export const CountryItem = ({name, index, onPress}: FinderItemType) => {
         styles.container,
         {backgroundColor: index % 2 ? '#f2f7f7' : '#edfafc'},
       ]}>
+          
       <Text>{name}</Text>
     </TouchableOpacity>
   );

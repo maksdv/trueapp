@@ -7,10 +7,12 @@ import {useTheme} from '../../utils/theme/ThemeProvider';
 import {headerTexts} from '../../utils/copys';
 import {CustomButton} from '../../components/buttons/CustomButton';
 import {Finder} from '../../components/finder/Finder';
-import { OfferList } from '../../components/offers/OfferList';
+import {OfferList} from '../../components/offers/OfferList';
+import {ItemType} from '../../components/offers/OfferItem';
+import {planList} from '../../service/PlanList';
 
 const styles = StyleSheet.create({
-  container: {flex: 1},
+  container: {flex: 1, paddingVertical: 10},
   text: {
     fontSize: 14,
   },
@@ -19,11 +21,12 @@ const styles = StyleSheet.create({
 export const Home: React.FC<{}> = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [country, setCountry] = useState<string>('');
+  const [offerSelected, setOffer] = useState<ItemType>(null);
   // Using the custom hook we made to pull the theme colors
   const {colors, isDark} = useTheme();
   const query = useQuery('COUNTRIES', getCountries);
   const bottomSheetRef = useRef<BottomSheet>(null);
-  // variables
+  // variables for bottomSheet
   const snapPoints = useMemo(() => ['0%', '90%'], []);
 
   const handleButton = () => {
@@ -44,6 +47,11 @@ export const Home: React.FC<{}> = () => {
     bottomSheetRef.current.collapse();
   };
 
+  const getMsgForHeader = () => {
+    if (!!country) return `Choosing plan for ${country}`;
+    return open ? headerTexts.open : headerTexts.close;
+  };
+
   if (query.isLoading) return <ActivityIndicator />;
   if (query.isError) {
     return (
@@ -59,10 +67,10 @@ export const Home: React.FC<{}> = () => {
         color={colors.primary}
         onPress={handleButton}
         textColor={colors.text}
-        text={open ? headerTexts.open : headerTexts.close}
+        text={getMsgForHeader()}
         icon="search1"
       />
-      <OfferList />
+      <OfferList selected={offerSelected} action={setOffer} />
       <BottomSheet
         style={{zIndex: 100}}
         ref={bottomSheetRef}
