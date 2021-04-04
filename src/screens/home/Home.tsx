@@ -1,13 +1,5 @@
-import {Text} from 'native-base';
-import React, {useCallback, useMemo, useRef, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  ViewStyle,
-  ActivityIndicator,
-  Button,
-  TouchableOpacity,
-} from 'react-native';
+import React, {useMemo, useRef, useState} from 'react';
+import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
 import {useQuery} from 'react-query';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {getCountries} from '../../service/getCountries';
@@ -15,6 +7,7 @@ import {useTheme} from '../../utils/theme/ThemeProvider';
 import {headerTexts} from '../../utils/copys';
 import {CustomButton} from '../../components/buttons/CustomButton';
 import {Finder} from '../../components/finder/Finder';
+import { OfferList } from '../../components/offers/OfferList';
 
 const styles = StyleSheet.create({
   container: {flex: 1},
@@ -25,7 +18,7 @@ const styles = StyleSheet.create({
 
 export const Home: React.FC<{}> = () => {
   const [open, setOpen] = useState<boolean>(false);
-  const [country, setCountry] = useState<object | null>(null);
+  const [country, setCountry] = useState<string>('');
   // Using the custom hook we made to pull the theme colors
   const {colors, isDark} = useTheme();
   const query = useQuery('COUNTRIES', getCountries);
@@ -43,10 +36,12 @@ export const Home: React.FC<{}> = () => {
   };
 
   const cleanArray = () => {
-    return query.data.map(item => ({
-      name: item.name,
-      flag: item.flag,
-    }));
+    return query.data.map(item => item.name);
+  };
+
+  const selectCountry = value => {
+    setCountry(value);
+    bottomSheetRef.current.collapse();
   };
 
   if (query.isLoading) return <ActivityIndicator />;
@@ -67,13 +62,14 @@ export const Home: React.FC<{}> = () => {
         text={open ? headerTexts.open : headerTexts.close}
         icon="search1"
       />
+      <OfferList />
       <BottomSheet
         style={{zIndex: 100}}
         ref={bottomSheetRef}
         index={-1}
         snapPoints={snapPoints}
         onChange={e => onChange(e)}>
-        <Finder data={cleanArray()} onSelect={{}} />
+        <Finder data={cleanArray()} onSelect={selectCountry} value={country} />
       </BottomSheet>
     </View>
   );
