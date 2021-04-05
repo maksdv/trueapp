@@ -6,6 +6,7 @@ import AsyncStorage from '@react-native-community/async-storage';
 import { Onboarding } from '../screens/Onboarding/Onboarding';
 import Login from '../screens/login/Login';
 import Signup from '../screens/register/Register';
+import { Home } from '../screens/home/Home';
 
 const Stack = createStackNavigator();
 
@@ -43,7 +44,12 @@ const AuthStack = () => {
       <Stack.Screen
         name="Login"
         component={Login}
-        options={{header: () => null}}
+        options={{header : () => null}}
+      />
+      <Stack.Screen
+        name="HomeNoAuth"
+        component={Home}
+        options={{headerTitle: 'TrueApp', headerTitleAlign: 'center'}}
       />
       <Stack.Screen
         name="Signup"

@@ -1,6 +1,14 @@
-import React, {useMemo, useRef, useState} from 'react';
-import {View, StyleSheet, ActivityIndicator, Text} from 'react-native';
+import React, {useContext, useMemo, useRef, useState} from 'react';
+import {
+  View,
+  StyleSheet,
+  ActivityIndicator,
+  Text,
+  Alert,
+  ScrollView,
+} from 'react-native';
 import {useQuery} from 'react-query';
+import {AuthContext} from '../../navigation/AuthProvider';
 import BottomSheet from '@gorhom/bottom-sheet';
 import {getCountries} from '../../service/getCountries';
 import {useTheme} from '../../utils/theme/ThemeProvider';
@@ -9,16 +17,23 @@ import {CustomButton} from '../../components/buttons/CustomButton';
 import {Finder} from '../../components/finder/Finder';
 import {OfferList} from '../../components/offers/OfferList';
 import {ItemType} from '../../components/offers/OfferItem';
-import {planList} from '../../service/PlanList';
 
 const styles = StyleSheet.create({
-  container: {flex: 1, paddingVertical: 10},
+  container: {flex: 1},
   text: {
     fontSize: 14,
   },
+  searchContainer:{
+    paddingHorizontal: '5%'
+  }
 });
 
-export const Home: React.FC<{}> = () => {
+type HomeType = {
+  navigation: any;
+};
+
+export const Home = ({navigation}: HomeType) => {
+  const {user} = useContext<any>(AuthContext);
   const [open, setOpen] = useState<boolean>(false);
   const [country, setCountry] = useState<string>('');
   const [offerSelected, setOffer] = useState<ItemType>(null);
@@ -44,12 +59,24 @@ export const Home: React.FC<{}> = () => {
 
   const selectCountry = value => {
     setCountry(value);
+    setOffer(null);
     bottomSheetRef.current.collapse();
   };
 
   const getMsgForHeader = () => {
     if (!!country) return `Choosing plan for ${country}`;
     return open ? headerTexts.open : headerTexts.close;
+  };
+
+  const getActionForGetIt = () => {
+    user
+      ? Alert.alert(
+          'Congratulation',
+          country
+            ? `Thanks for buying your plan for ${country}.`
+            : 'Thanks for use our app.',
+        )
+      : navigation.replace('Login');
   };
 
   if (query.isLoading) return <ActivityIndicator />;
@@ -63,13 +90,13 @@ export const Home: React.FC<{}> = () => {
 
   return (
     <View style={[styles.container, {backgroundColor: colors.background}]}>
-      <CustomButton
+      <View style={styles.searchContainer}><CustomButton
         color={colors.primary}
         onPress={handleButton}
         textColor={colors.text}
         text={getMsgForHeader()}
         icon="search1"
-      />
+      /></View>
       <OfferList selected={offerSelected} action={setOffer} />
       <BottomSheet
         style={{zIndex: 100}}
@@ -79,6 +106,22 @@ export const Home: React.FC<{}> = () => {
         onChange={e => onChange(e)}>
         <Finder data={cleanArray()} onSelect={selectCountry} value={country} />
       </BottomSheet>
+      <View
+        style={{
+          width: '100%',
+          paddingHorizontal: '5%',
+          paddingVertical: 10,
+          position: 'absolute',
+          bottom: 0,
+        }}>
+        <CustomButton
+          color={colors.buy}
+          onPress={() => getActionForGetIt()}
+          textColor={colors.text}
+          text={'GET IT'}
+          hiden={!offerSelected}
+        />
+      </View>
     </View>
   );
 };

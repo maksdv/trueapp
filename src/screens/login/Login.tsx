@@ -48,6 +48,9 @@ const Login = ({navigation}) => {
       />
 
       <FormButton buttonTitle="Sign In" onPress={() => handleLogin()} />
+      <TouchableOpacity onPress={() => navigation.navigate('HomeNoAuth')}>
+        <Text>Do you want to try TRUEAPP without login?</Text>
+      </TouchableOpacity>
       <TouchableOpacity
         style={styles.forgotButton}
         onPress={() => navigation.navigate('Signup')}>

@@ -22,6 +22,7 @@ type ButtonType = {
   onPress: any;
   textColor: string;
   icon?: string;
+  hiden?: boolean;
 };
 
 export const CustomButton = ({
@@ -30,13 +31,15 @@ export const CustomButton = ({
   onPress,
   textColor,
   icon,
+  hiden,
 }: ButtonType) => {
+  if (hiden) return null;
   return (
     <TouchableOpacity
       onPress={() => onPress()}
       style={[styles.container, {backgroundColor: color}]}>
       <Text style={[styles.text, {color: textColor}]}>{text}</Text>
-      {icon && <AntIcon style={{fontSize: 20}} name={icon} />}
+      {icon && <AntIcon style={{fontSize: 20, color: textColor}} name={icon} />}
     </TouchableOpacity>
   );
 };
